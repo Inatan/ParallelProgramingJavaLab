@@ -1,0 +1,99 @@
+class ProcessTree{
+  //   static needRoot =false;
+    public int port;
+    public byte[] data;
+    public String ip;
+    private ArrayList<ProcessTree> children;
+    private ProcessTree father;
+    
+    public ProcessTree(int port, String ip, byte[] data) {
+        
+        this.children = new ArrayList<ProcessTree>();
+        this.father=null;
+        this.port= port;
+        this.ip=ip;
+        this.data=data;
+    }
+    
+    public void insertChild(ProcessTree child)
+    {
+        this.children.add(child);
+        child.father = this;
+    }
+    
+    public void rootCollect(){
+        Socket s;
+        DataOutputStream dOut;
+        DataInputStream dIn;
+        BufferedReader reader;
+        for(int i=0; i< this.children.size(); i++){
+            try {
+                s = new Socket(this.children.get(i).ip,this.children.get(i).port);
+                dOut = new DataOutputStream(s.getOutputStream());
+                dOut.write(this.data);
+                dOut.flush();
+            } catch (IOException ex) {
+                Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        for(int i=0; i< this.children.size(); i++){
+            try {
+                s = new Socket(this.children.get(i).ip,this.children.get(i).port);
+                dIn =  (DataInputStream) s.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+                //
+                } catch (IOException ex) {
+                Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    }
+    
+    public void childCollect(){
+        Socket s;
+        DataOutputStream dOut;
+        DataInputStream dIn;
+        BufferedReader reader;
+        try {
+            s = new Socket(this.father.ip,this.father.port);
+            dIn =  (DataInputStream) s.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(in));
+            } catch (IOException ex) {
+            Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for(int i=0; i< this.children.size(); i++){
+            try {
+                s = new Socket(this.children.get(i).ip,this.children.get(i).port);
+                dOut = new DataOutputStream(s.getOutputStream());
+                dOut.write(this.data);
+                dOut.flush();
+            } catch (IOException ex) {
+                Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        for(int i=0; i< this.children.size(); i++){
+            try {
+                s = new Socket(this.children.get(i).ip,this.children.get(i).port);
+                dIn =  (DataInputStream) s.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+                //
+                } catch (IOException ex) {
+                Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        try {
+                s = new Socket(this.father.ip,this.father.port);
+                dIn =  (DataInputStream) s.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(in));
+                //
+                } catch (IOException ex) {
+                Logger.getLogger(ProcessTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
